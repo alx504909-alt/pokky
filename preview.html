@@ -118,10 +118,8 @@
   </div>
 
   <div class="card"><div class="cap">🤍 Как ты сегодня?</div>
-    <div class="glasses" style="gap:8px">
-      <div class="glass">😔</div><div class="glass">😐</div><div class="glass" style="background:linear-gradient(135deg,#F3E7D8,#F7EFE4);box-shadow:inset 0 0 0 2px var(--apricot)">🙂</div><div class="glass">😊</div><div class="glass">✨</div>
-    </div>
-    <div class="wnum">Хороший день — и это чувствуется по тарелке</div>
+    <div class="glasses" id="moods" style="gap:8px"></div>
+    <div class="wnum" id="moodlbl">Выбери, как ты — я подстрою заботу под твоё настроение</div>
   </div>
 
   <div class="sec">Сегодня на столе</div>
@@ -148,6 +146,23 @@
     }
   }
   drawWater();
+  var MOODS=[{e:'😔',t:'Трудный день бывает у каждой. Будь к себе помягче — еда пусть будет опорой, а не задачей 🤍'},
+             {e:'😐',t:'Ровный день. Просто питайся спокойно, без давления 🌿'},
+             {e:'🙂',t:'Хороший настрой — и это чувствуется по тарелке 🌷'},
+             {e:'😊',t:'Ты в ресурсе! Отличный день позаботиться о себе с удовольствием ✨'},
+             {e:'✨',t:'Вдохновение! Лови этот поток — тело скажет спасибо 💛'}];
+  var mood=2;
+  function drawMoods(){
+    var m=document.getElementById('moods'); m.innerHTML='';
+    MOODS.forEach(function(o,i){
+      var d=document.createElement('div');
+      d.className='glass'; d.textContent=o.e;
+      if(i===mood){d.style.background='linear-gradient(135deg,#F3E7D8,#F7EFE4)';d.style.boxShadow='inset 0 0 0 2px var(--apricot)';}
+      d.onclick=(function(n){return function(){ mood=n; document.getElementById('moodlbl').textContent=MOODS[n].t; drawMoods(); };})(i);
+      m.appendChild(d);
+    });
+  }
+  drawMoods();
   function rec(){ alert('В боевой версии кнопка откроет чат с Pokky, чтобы записать приём голосом, текстом или фото 🌿'); }
 </script>
 </body>
