@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<title>Pokky — мой дашборд</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{--bg:#eef8f4;--card:#fff;--ink:#2c3a35;--muted:#8aa89c;--peach:#34c3a0;--rose:#a3ead4;
+    --sage:#2fae94;--gold:#6fc9ac;--lilac:#a3e0c8;--ring:#e0f0ea;--shadow:0 8px 30px rgba(50,150,120,.13)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);
+    color:var(--ink);max-width:480px;margin:0 auto;padding:16px 16px 40px;min-height:100vh}
+  .hi{font-size:20px;font-weight:800;margin:4px 2px}
+  .card{background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .streak-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .streak-num{font-size:22px;font-weight:800}
+  .streak-num span{color:var(--peach)}
+  .streak-sub{font-size:12px;color:var(--muted)}
+  .week{display:flex;justify-content:space-between;gap:6px}
+  .day{flex:1;text-align:center}
+  .dot{width:34px;height:34px;margin:0 auto 4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--ring);font-size:15px}
+  .dot.on{background:linear-gradient(135deg,var(--peach),var(--rose));color:#fff;box-shadow:0 4px 12px rgba(80,180,110,.4)}
+  .dot.today{outline:2px solid var(--peach);outline-offset:2px}
+  .dl{font-size:11px;color:var(--muted)}
+  .ringwrap{display:flex;align-items:center;gap:18px}
+  .ring{position:relative;width:130px;height:130px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .big{font-size:25px;font-weight:800;line-height:1}
+  .ring .sm{font-size:11px;color:var(--muted);margin-top:3px}
+  .rmsg{font-size:14px;line-height:1.45}
+  .rmsg b{color:var(--peach)}
+  .macros{display:flex;gap:10px;margin-top:2px}
+  .macro{flex:1;background:var(--card);border-radius:16px;padding:11px;box-shadow:var(--shadow);text-align:center}
+  .macro .mv{font-weight:800;font-size:15px}.macro .ml{font-size:10px;color:var(--muted);margin-bottom:7px}
+  .bar{height:6px;border-radius:6px;background:var(--ring);overflow:hidden}.bar>i{display:block;height:100%}
+  .sec{font-weight:700;font-size:14px;margin:18px 4px 8px}
+  .item{display:flex;justify-content:space-between;background:var(--card);border-radius:14px;padding:11px 14px;
+    box-shadow:var(--shadow);margin-bottom:8px;font-size:14px}
+  .item .k{color:var(--peach);font-weight:700}
+  .empty{color:var(--muted);font-size:13px;font-style:italic;padding:6px 4px}
+  .load{text-align:center;color:var(--muted);padding:40px 0;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app"><div class="load">Загружаем твой день… 🌿</div></div>
+
+<script>
+// --- ключ пользователя: из Telegram start_param, из ?k=, либо (legacy) ?uid= ---
+var qs=new URLSearchParams(location.search);
+var KEY=qs.get('k')||'';
+try{var tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand();
+  if(tg.initDataUnsafe&&tg.initDataUnsafe.start_param)KEY=tg.initDataUnsafe.start_param;}}catch(e){}
+var DATA=null;
+
+function ring(pct,eaten,goal){var C=2*Math.PI*58,off=C*(1-Math.min(pct,1));
+  return '<div class="ring"><svg width="130" height="130">'
+    +'<circle cx="65" cy="65" r="58" fill="none" stroke="var(--ring)" stroke-width="14"/>'
+    +'<circle cx="65" cy="65" r="58" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/>'
+    +'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c3a0"/><stop offset="1" stop-color="#a3ead4"/></linearGradient></defs>'
+    +'</svg><div class="c"><div class="big">'+eaten+'</div><div class="sm">из '+goal+' ккал</div></div></div>';}
+
+function msg(left){if(left>500)return 'Осталось <b>'+left+'</b> ккал — ты отлично идёшь 💚';
+  if(left>=0)return 'Почти у цели: ещё <b>'+left+'</b> ккал 🌿';return 'Сегодня чуть больше нормы — и это ок ✨';}
+
+function macro(v,g,label,color){var pct=Math.min(v/g*100,100)||0;
+  return '<div class="macro"><div class="mv">'+Math.round(v)+'/'+g+'</div><div class="ml">'+label+', г</div>'
+    +'<div class="bar"><i style="width:'+pct+'%;background:'+color+'"></i></div></div>';}
+
+function plural(n){n=n%100;if(n>=11&&n<=14)return 'дней';n=n%10;if(n===1)return 'день';if(n>=2&&n<=4)return 'дня';return 'дней';}
+
+function render(){var d=DATA;var name=d.name?(', '+d.name):'';
+  var eaten=d.today.kcal, goal=d.norm.kcal||1, left=goal-eaten;
+  var dots=d.week.map(function(w){return '<div class="day"><div class="dot '+(w.active?'on':'')+' '+(w.today?'today':'')+'">'+(w.active?'🔥':'')+'</div><div class="dl">'+w.label+'</div></div>';}).join('');
+  var items=d.today.items.length?d.today.items.map(function(it){return '<div class="item"><span>'+it.n+'</span><span class="k">'+it.kcal+' ккал</span></div>';}).join(''):'<div class="empty">пока пусто — запиши, когда поешь 🌿</div>';
+  document.getElementById('app').innerHTML=
+   '<div class="hi">Привет'+name+' 🌿</div>'
+   +'<div class="card">'
+   +'<div class="streak-top"><div><div class="streak-num"><span>'+d.streak+'</span> '+plural(d.streak)+' подряд 🔥</div>'
+   +'<div class="streak-sub">твоя неделя заботы</div></div></div>'
+   +'<div class="week">'+dots+'</div></div>'
+   +'<div class="card"><div class="ringwrap">'+ring(eaten/goal,eaten,goal)+'<div class="rmsg">'+(eaten?msg(left):'Доброе утро! Начнём день спокойно 🌷')+'</div></div></div>'
+   +'<div class="macros">'
+   +macro(d.today.p,d.norm.p,'Белки','var(--sage)')
+   +macro(d.today.f,d.norm.f,'Жиры','var(--gold)')
+   +macro(d.today.c,d.norm.c,'Углеводы','var(--lilac)')
+   +'</div>'
+   +'<div class="sec">Сегодня съедено</div>'+items;
+}
+
+function load(){
+  if(!KEY){document.getElementById('app').innerHTML='<div class="load">Открой дашборд через бота — кнопка «📈 Мой дашборд» 🌿</div>';return;}
+  var url='https://raw.githubusercontent.com/alx504909-alt/pokky/main/data/'+encodeURIComponent(KEY)+'.json?v='+Date.now();
+  fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();})
+   .then(function(d){DATA=d;render();})
+   .catch(function(){document.getElementById('app').innerHTML='<div class="load">Пока нет данных 🌿<br>Пройди онбординг в боте (/start) и запиши первый приём пищи, потом открой дашборд.</div>';});
+}
+load();
+</script>
+</body>
+</html>
