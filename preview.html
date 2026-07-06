@@ -3,142 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-<title>Pokky — мой день</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Pokky — твоя спутница по питанию</title>
 <style>
   :root{
     --bg:#F6F1EA; --card:#FFFFFF; --ink:#23201C; --muted:#9E948A; --faint:#C7BEB4;
-    --line:rgba(35,32,28,.07); --accent:#2E7D64; --accent-2:#3E9B7C; --accent-soft:#E8F1EC;
-    --apricot:#E0A06E; --gold:#CDA24A; --track:#EFE8DF;
+    --line:rgba(35,32,28,.07); --accent:#2E7D64; --accent2:#3E9B7C; --soft:#E8F1EC;
+    --apricot:#E0A06E; --gold:#CDA24A; --rose:#D98A9E; --sky:#7FB7C7; --track:#EFE8DF;
     --shadow:0 6px 22px rgba(35,32,28,.06);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    background:var(--bg);color:var(--ink);max-width:460px;margin:0 auto;
-    padding:20px 18px 40px;min-height:100vh;-webkit-font-smoothing:antialiased}
-  .top{display:flex;align-items:center;gap:12px;margin:2px 2px 18px}
+    background:var(--bg);color:var(--ink);max-width:460px;margin:0 auto;padding:20px 18px 40px;
+    min-height:100vh;-webkit-font-smoothing:antialiased}
+  .top{display:flex;align-items:center;gap:12px;margin:2px 2px 12px}
   .ava{width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:600;font-size:19px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;font-size:19px;
     box-shadow:0 4px 12px rgba(46,125,100,.28)}
   .hi{font-size:21px;font-weight:700;letter-spacing:-.2px;line-height:1.15}
   .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
-  .card{background:var(--card);border-radius:22px;padding:18px 18px;box-shadow:var(--shadow);
-    border:1px solid var(--line);margin-bottom:14px}
+  .care{background:var(--soft);border-radius:16px;padding:13px 15px;font-size:14px;line-height:1.5;color:#2c4d41;margin-bottom:14px}
+  .care b{color:var(--accent);font-weight:600}
+  .card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:14px}
   .lbl{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
-  /* streak */
+  .row2{display:flex;gap:12px}
+  .row2>.card{flex:1;margin-bottom:14px}
   .st-head{display:flex;align-items:baseline;gap:8px;margin-bottom:14px}
-  .st-num{font-size:26px;font-weight:700;letter-spacing:-.5px}
-  .st-word{font-size:14px;color:var(--muted);font-weight:500}
+  .st-num{font-size:24px;font-weight:700;letter-spacing:-.5px}
+  .st-word{font-size:13.5px;color:var(--muted);font-weight:500}
   .week{display:flex;justify-content:space-between;gap:6px}
   .day{flex:1;text-align:center}
-  .dot{width:32px;height:32px;margin:0 auto 6px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-    background:var(--track);font-size:13px;color:var(--faint);transition:.2s}
-  .dot.on{background:var(--accent-soft);color:var(--accent)}
+  .dot{width:30px;height:30px;margin:0 auto 6px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    background:var(--track);font-size:12px;color:var(--faint)}
+  .dot.on{background:var(--soft);color:var(--accent)}
   .dot.today{box-shadow:inset 0 0 0 2px var(--accent)}
-  .dl{font-size:11px;color:var(--muted);font-weight:500}
-  /* ring */
-  .ringwrap{display:flex;align-items:center;gap:20px}
-  .ring{position:relative;width:132px;height:132px;flex:0 0 auto}
+  .dl{font-size:10.5px;color:var(--muted);font-weight:500}
+  .ringwrap{display:flex;align-items:center;gap:18px}
+  .ring{position:relative;width:120px;height:120px;flex:0 0 auto}
   .ring svg{transform:rotate(-90deg)}
   .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring .big{font-size:28px;font-weight:700;line-height:1;letter-spacing:-.5px}
-  .ring .sm{font-size:11.5px;color:var(--muted);margin-top:4px}
-  .rmsg{font-size:14.5px;line-height:1.5;color:#4a453e}
-  .rmsg b{color:var(--accent);font-weight:600}
-  /* macros */
-  .macros{display:flex;gap:10px;margin-bottom:14px}
-  .macro{flex:1;background:var(--card);border-radius:18px;padding:13px 12px;box-shadow:var(--shadow);border:1px solid var(--line)}
-  .macro .ml{font-size:10.5px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-  .macro .mv{font-weight:700;font-size:15px;letter-spacing:-.2px}.macro .mv i{color:var(--faint);font-weight:500;font-style:normal;font-size:12.5px}
-  .bar{height:6px;border-radius:6px;background:var(--track);overflow:hidden;margin-top:9px}.bar>i{display:block;height:100%;border-radius:6px}
-  /* items */
+  .ring .big{font-size:25px;font-weight:700;line-height:1;letter-spacing:-.5px}
+  .ring .sm{font-size:11px;color:var(--muted);margin-top:3px}
+  .rmsg{font-size:13.5px;line-height:1.45;color:#4a453e}
+  .cap{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .macros{display:flex;gap:9px;margin-bottom:14px}
+  .macro{flex:1;background:var(--card);border-radius:16px;padding:12px 10px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .macro .ml{font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  .macro .mv{font-weight:700;font-size:14px}.macro .mv i{color:var(--faint);font-weight:500;font-style:normal;font-size:11.5px}
+  .bar{height:5px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:8px}.bar>i{display:block;height:100%;border-radius:5px}
+  .glasses{display:flex;gap:7px;margin-top:4px}
+  .glass{flex:1;height:34px;border-radius:9px;background:var(--track);display:flex;align-items:center;justify-content:center;font-size:15px}
+  .glass.full{background:#E3F0F4}
+  .wnum{font-size:13px;color:var(--muted);margin-top:9px}
+  .wnum b{color:var(--sky);font-weight:700}
+  .cyc{display:flex;align-items:center;gap:14px}
+  .cyc .badge{width:52px;height:52px;border-radius:50%;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#EAD3DA,#F2E3E8);color:#9c4d63;font-weight:700}
+  .cyc .badge .d{font-size:18px;line-height:1}.cyc .badge .t{font-size:8.5px;letter-spacing:.3px}
+  .cyc .txt{font-size:13.5px;line-height:1.45;color:#4a453e}
+  .cyc .txt b{color:#b05a72;font-weight:600}
   .sec{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin:20px 6px 10px}
   .list{background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);overflow:hidden}
-  .item{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;font-size:14.5px;border-top:1px solid var(--line)}
+  .item{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;font-size:14px;border-top:1px solid var(--line)}
   .item:first-child{border-top:none}
-  .item .k{color:var(--accent);font-weight:600;font-size:13.5px;white-space:nowrap;padding-left:12px}
-  .empty{padding:22px 16px;color:var(--muted);font-size:13.5px;text-align:center;line-height:1.5}
-  /* cta */
-  .cta{position:sticky;bottom:12px;margin-top:20px}
-  .btn{display:block;width:100%;text-align:center;padding:15px;border-radius:16px;border:none;cursor:pointer;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:15px;font-weight:600;
+  .item .k{color:var(--accent);font-weight:600;font-size:13px;white-space:nowrap;padding-left:12px}
+  .cta{margin-top:20px}
+  .btn{display:block;width:100%;text-align:center;padding:15px;border-radius:16px;border:none;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-weight:600;
     box-shadow:0 8px 20px rgba(46,125,100,.28);font-family:inherit}
-  /* welcome (new user) */
-  .welcome{text-align:center;padding:20px 8px}
-  .welcome .em{font-size:40px}
-  .welcome h2{font-size:20px;font-weight:700;margin:12px 0 6px}
-  .welcome p{font-size:14px;color:var(--muted);line-height:1.55;margin:0 auto 4px;max-width:300px}
-  .load{text-align:center;color:var(--muted);padding:60px 0;line-height:1.6}
+  .demo{text-align:center;font-size:11px;color:var(--faint);margin-top:16px}
 </style>
 </head>
 <body>
-<div id="app"><div class="load">Загружаем твой день… 🌿</div></div>
+  <div class="top"><div class="ava">А</div><div><div class="hi">Привет, Александра 🌿</div><div class="sub">твоя спутница по питанию</div></div></div>
 
-<script>
-var qs=new URLSearchParams(location.search);
-var KEY=qs.get('k')||'';
-var tg=null;
-try{tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand();
-  try{tg.setHeaderColor&&tg.setHeaderColor('#F6F1EA');tg.setBackgroundColor&&tg.setBackgroundColor('#F6F1EA');}catch(e){}
-  if(tg.initDataUnsafe&&tg.initDataUnsafe.start_param)KEY=tg.initDataUnsafe.start_param;}}catch(e){}
-var DATA=null;
+  <div class="care">Перед месячными часто тянет на сладкое — это <b>тело просит энергию</b>, а не слабость. Съешь спокойно, без вины 🤍</div>
 
-function initial(n){n=(n||'').trim();return n?n[0].toUpperCase():'🌿';}
-function plural(n){var m=n%100;if(m>=11&&m<=14)return 'дней';m=n%10;if(m===1)return 'день';if(m>=2&&m<=4)return 'дня';return 'дней';}
-function ring(pct,eaten,goal){var C=2*Math.PI*58,off=C*(1-Math.min(pct,1));
-  return '<div class="ring"><svg width="132" height="132">'
-    +'<circle cx="66" cy="66" r="58" fill="none" stroke="var(--track)" stroke-width="13"/>'
-    +'<circle cx="66" cy="66" r="58" fill="none" stroke="url(#g)" stroke-width="13" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/>'
-    +'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E7D64"/><stop offset="1" stop-color="#3E9B7C"/></linearGradient></defs>'
-    +'</svg><div class="c"><div class="big">'+eaten+'</div><div class="sm">из '+goal+' ккал</div></div></div>';}
-function msg(left){if(left>500)return 'Осталось <b>'+left+'</b> ккал — ты отлично идёшь сегодня 🌿';
-  if(left>=0)return 'Почти у цели: ещё <b>'+left+'</b> ккал ✨';return 'Сегодня немного больше нормы — и это тоже ок 💛';}
-function macro(v,g,label,color){v=Math.round(v);var pct=Math.min(v/(g||1)*100,100)||0;
-  return '<div class="macro"><div class="ml">'+label+'</div><div class="mv">'+v+' <i>/ '+g+' г</i></div>'
-    +'<div class="bar"><i style="width:'+pct+'%;background:'+color+'"></i></div></div>';}
+  <div class="card"><div class="st-head"><div class="st-num">5</div><div class="st-word">дней вместе 🔥</div></div>
+    <div class="week">
+      <div class="day"><div class="dot on">🔥</div><div class="dl">Пн</div></div>
+      <div class="day"><div class="dot on">🔥</div><div class="dl">Вт</div></div>
+      <div class="day"><div class="dot on">🔥</div><div class="dl">Ср</div></div>
+      <div class="day"><div class="dot on">🔥</div><div class="dl">Чт</div></div>
+      <div class="day"><div class="dot on today">🔥</div><div class="dl">Пт</div></div>
+      <div class="day"><div class="dot">·</div><div class="dl">Сб</div></div>
+      <div class="day"><div class="dot">·</div><div class="dl">Вс</div></div>
+    </div>
+  </div>
 
-function render(){var d=DATA;var name=d.name?(', '+d.name):'';
-  var eaten=Math.round(d.today.kcal), goal=d.norm.kcal||1, left=goal-eaten;
-  var dots=d.week.map(function(w){return '<div class="day"><div class="dot '+(w.active?'on':'')+' '+(w.today?'today':'')+'">'+(w.active?'🔥':'')+'</div><div class="dl">'+w.label+'</div></div>';}).join('');
-  var items=d.today.items.length?('<div class="list">'+d.today.items.map(function(it){return '<div class="item"><span>'+it.n+'</span><span class="k">'+it.kcal+' ккал</span></div>';}).join('')+'</div>'):'<div class="list"><div class="empty">Пока пусто — напиши в чат, что съела, и здесь появится запись 🌿</div></div>';
-  document.getElementById('app').innerHTML=
-    '<div class="top"><div class="ava">'+initial(d.name)+'</div><div><div class="hi">Привет'+name+'</div><div class="sub">твой день заботы</div></div></div>'
-   +'<div class="card"><div class="st-head"><div class="st-num">'+d.streak+'</div><div class="st-word">'+plural(d.streak)+' подряд 🔥</div></div>'
-   +'<div class="week">'+dots+'</div></div>'
-   +'<div class="card"><div class="ringwrap">'+ring(eaten/goal,eaten,goal)+'<div class="rmsg">'+(eaten?msg(left):'Доброе утро! Начнём день спокойно и по-доброму 🌷')+'</div></div></div>'
-   +'<div class="macros">'
-   +macro(d.today.p,d.norm.p,'Белки','var(--accent)')
-   +macro(d.today.f,d.norm.f,'Жиры','var(--apricot)')
-   +macro(d.today.c,d.norm.c,'Углеводы','var(--gold)')
-   +'</div>'
-   +'<div class="sec">Сегодня съедено</div>'+items
-   +'<div class="cta"><button class="btn" onclick="backToChat()">＋ Записать приём</button></div>';
-}
-function backToChat(){try{if(tg){tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light');tg.close();}}catch(e){}}
+  <div class="card"><div class="ringwrap">
+    <div class="ring"><svg width="120" height="120">
+      <circle cx="60" cy="60" r="52" fill="none" stroke="var(--track)" stroke-width="12"/>
+      <circle cx="60" cy="60" r="52" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="90"/>
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E7D64"/><stop offset="1" stop-color="#3E9B7C"/></linearGradient></defs>
+    </svg><div class="c"><div class="big">1290</div><div class="sm">из 1800 ккал</div></div></div>
+    <div class="rmsg">Ещё есть место на тёплый ужин 🌷 Ты идёшь спокойно и по-доброму.</div>
+  </div></div>
 
-function welcome(txt){document.getElementById('app').innerHTML=
-  '<div class="card welcome"><div class="em">🌿</div><h2>Твой день заботы</h2>'
-  +'<p>'+txt+'</p></div>'
-  +'<div class="cta"><button class="btn" onclick="backToChat()">Открыть чат с Pokky</button></div>';}
+  <div class="macros">
+    <div class="macro"><div class="ml">Белки</div><div class="mv">78 <i>/110 г</i></div><div class="bar"><i style="width:71%;background:var(--accent)"></i></div></div>
+    <div class="macro"><div class="ml">Жиры</div><div class="mv">41 <i>/60 г</i></div><div class="bar"><i style="width:68%;background:var(--apricot)"></i></div></div>
+    <div class="macro"><div class="ml">Углеводы</div><div class="mv">150 <i>/200 г</i></div><div class="bar"><i style="width:75%;background:var(--gold)"></i></div></div>
+  </div>
 
-var DATA={
-  name:"Александра",
-  norm:{kcal:1800,p:110,f:60,c:200},
-  today:{kcal:1290,p:78,f:41,c:150,items:[
-    {n:"Овсянка с ягодами",kcal:320},
-    {n:"Кофе с молоком",kcal:60},
-    {n:"Куриная грудка с рисом",kcal:480},
-    {n:"Творог 5%, 150 г",kcal:170},
-    {n:"Яблоко",kcal:80},
-    {n:"Орехи, горсть",kcal:180}
-  ]},
-  streak:5,
-  week:[{label:"Пн",active:true},{label:"Вт",active:true},{label:"Ср",active:true},
-        {label:"Чт",active:true},{label:"Пт",active:true,today:true},
-        {label:"Сб",active:false},{label:"Вс",active:false}]
-};
-render();
-</script>
+  <div class="card"><div class="cap">💧 Вода</div>
+    <div class="glasses"><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass"></div><div class="glass"></div><div class="glass"></div></div>
+    <div class="wnum"><b>5</b> из 8 стаканов сегодня</div>
+  </div>
+
+  <div class="card"><div class="cap">🌙 Цикл</div>
+    <div class="cyc"><div class="badge"><div class="d">14</div><div class="t">ДЕНЬ</div></div>
+      <div class="txt"><b>Овуляция.</b> Энергии сегодня больше обычного — хороший день для активности. Аппетит ровный, тянет на белок 🌿</div>
+    </div>
+  </div>
+
+  <div class="card"><div class="cap">🤍 Как ты сегодня?</div>
+    <div class="glasses" style="gap:8px">
+      <div class="glass">😔</div><div class="glass">😐</div><div class="glass" style="background:linear-gradient(135deg,#F3E7D8,#F7EFE4);box-shadow:inset 0 0 0 2px var(--apricot)">🙂</div><div class="glass">😊</div><div class="glass">✨</div>
+    </div>
+    <div class="wnum">Хороший день — и это чувствуется по тарелке</div>
+  </div>
+
+  <div class="sec">Сегодня на столе</div>
+  <div class="list">
+    <div class="item"><span>Овсянка с ягодами</span><span class="k">320 ккал</span></div>
+    <div class="item"><span>Кофе с молоком</span><span class="k">60 ккал</span></div>
+    <div class="item"><span>Куриная грудка с рисом</span><span class="k">480 ккал</span></div>
+    <div class="item"><span>Творог 5%, 150 г</span><span class="k">170 ккал</span></div>
+    <div class="item"><span>Яблоко · орехи</span><span class="k">260 ккал</span></div>
+  </div>
+
+  <div class="cta"><button class="btn">＋ Записать приём или воду</button></div>
+  <div class="demo">это превью нового вида · данные для примера</div>
 </body>
 </html>
