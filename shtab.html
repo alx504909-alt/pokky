@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Штаб Александры</title>
+<style>
+  :root{
+    --bg:#F6F1EA;--card:#FFFFFF;--ink:#23201C;--muted:#9E948A;--faint:#C7BEB4;
+    --line:rgba(35,32,28,.07);--accent:#2E7D64;--accent2:#3E9B7C;--soft:#E8F1EC;
+    --apricot:#E0A06E;--gold:#CDA24A;--rose:#D98A9E;--track:#EFE8DF;
+    --shadow:0 6px 22px rgba(35,32,28,.06);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);max-width:560px;margin:0 auto;padding:22px 18px 48px;
+    min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5}
+  .head{display:flex;align-items:center;gap:12px;margin:0 2px 6px}
+  .ava{width:46px;height:46px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;font-size:20px;
+    box-shadow:0 4px 12px rgba(46,125,100,.28)}
+  h1{font-size:22px;font-weight:700;letter-spacing:-.3px;margin:0;line-height:1.1}
+  .date{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:14px}
+  .goal{background:linear-gradient(135deg,#2E7D64,#3E9B7C);color:#fff;border:none}
+  .goal .lbl{color:rgba(255,255,255,.8)}
+  .goal .g{font-size:17px;font-weight:600;margin-top:4px}
+  .goal .gs{font-size:13px;color:rgba(255,255,255,.85);margin-top:6px}
+  .lbl{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+  .win{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;margin-top:11px}
+  .win .ck{color:var(--accent);font-weight:700;flex:0 0 auto}
+  .todo{display:flex;gap:11px;align-items:flex-start;font-size:15px;margin-top:12px}
+  .todo .n{width:24px;height:24px;border-radius:8px;background:var(--soft);color:var(--accent);font-weight:700;
+    font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .proj{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-top:1px solid var(--line)}
+  .proj:first-of-type{border-top:none}
+  .dotc{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 auto}
+  .pn{font-weight:600;font-size:14.5px}
+  .pd{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .chip{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  .chip.go{background:var(--soft);color:var(--accent)}
+  .chip.wip{background:#FBEFE2;color:#B9772F}
+  .chip.rout{background:#F1ECE4;color:#8B8177}
+  .shelf-t{font-size:13px;font-weight:700;margin:2px 2px 6px;color:var(--ink)}
+  .know a,.know span{display:block;font-size:13.5px;color:var(--accent);margin-top:8px;text-decoration:none}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;line-height:1.6}
+  .heart{color:var(--rose)}
+</style>
+</head>
+<body>
+  <div class="head">
+    <div class="ava">А</div>
+    <div><h1>Штаб Александры</h1><div class="date">Понедельник, 6 июля 2026 · веду вместе с тобой</div></div>
+  </div>
+
+  <div class="card goal">
+    <div class="lbl">Большая цель</div>
+    <div class="g">Переезд семьёй за границу 🌍</div>
+    <div class="gs">Словакия / на рассмотрении · якорь — цифровой продукт Pokky · английский A2–B1 · бюджет ~1 млн ₽</div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">🌿 Успехи сегодня</div>
+    <div class="win"><span class="ck">✓</span><span>АВЕНЮ: прайсы под SEO по всем 18 филиалам — готовы, уникальные описания без дублей</span></div>
+    <div class="win"><span class="ck">✓</span><span>Pokky: редизайн мини-аппа — из «дёшево» в приятный премиум-вид</span></div>
+    <div class="win"><span class="ck">✓</span><span>Pokky: выбрана стратегия денег — B2B для нутрициологов</span></div>
+    <div class="win"><span class="ck">✓</span><span>Инсайт: Telegram в РФ требует VPN → план каналов без VPN (VK / веб)</span></div>
+    <div class="win"><span class="ck">✓</span><span>Презентация по гео-продвижению изучена и сохранена в базу знаний</span></div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">☀️ План на завтра — 3 главных дела</div>
+    <div class="todo"><span class="n">1</span><span>Pokky: выбрать нишу + упаковать B2B-оффер (одностраничник для нутрициологов)</span></div>
+    <div class="todo"><span class="n">2</span><span>Pokky: решить первый канал без VPN — VK Mini App или веб (я подготовлю сравнение)</span></div>
+    <div class="todo"><span class="n">3</span><span>АВЕНЮ: начать заливать готовые прайсы в карточки (по одному филиалу)</span></div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">📁 Мои проекты</div>
+
+    <div class="shelf-t" style="margin-top:12px">💰 Деньги сейчас · клиенты</div>
+    <div class="proj"><span class="dotc" style="background:var(--accent)"></span><div><span class="pn">Медклиники АВЕНЮ</span><span class="chip go">прайсы готовы</span><div class="pd">Ростов + Батайск, 18 филиалов · отзывы, SEO, лиды</div></div></div>
+    <div class="proj"><span class="dotc" style="background:var(--apricot)"></span><div><span class="pn">Клиники Карелия</span><span class="chip rout">рутина</span><div class="pd">3 филиала · гео-продвижение + офлайн-реклама</div></div></div>
+    <div class="proj"><span class="dotc" style="background:var(--rose)"></span><div><span class="pn">Bodysphere · Париж</span><span class="chip rout">рутина</span><div class="pd">студия массажа · сторис + таргет</div></div></div>
+
+    <div class="shelf-t" style="margin-top:16px">🚀 Свои продукты · будущее</div>
+    <div class="proj"><span class="dotc" style="background:var(--accent)"></span><div><span class="pn">Pokky · флагман</span><span class="chip wip">в фокусе</span><div class="pd">@Pppokky_bot · подсчёт КБЖУ · редизайн ✓ · монетизация B2B + каналы без VPN</div></div></div>
+    <div class="proj"><span class="dotc" style="background:var(--gold)"></span><div><span class="pn">Квиз-бот Бритни</span><span class="chip rout">на паузе</span><div class="pd">@britney_quiz_bot · музыкальный квиз</div></div></div>
+    <div class="proj"><span class="dotc" style="background:var(--gold)"></span><div><span class="pn">Тренажёр английского</span><span class="chip rout">на паузе</span><div class="pd">@Engl_trainer_bot · тренировка слов</div></div></div>
+
+    <div class="shelf-t" style="margin-top:16px">🎯 Большая цель</div>
+    <div class="proj"><span class="dotc" style="background:var(--accent2)"></span><div><span class="pn">Переезд</span><span class="chip wip">думаем</span><div class="pd">якорь — Pokky · вопросы по маршруту заданы</div></div></div>
+  </div>
+
+  <div class="card know">
+    <div class="lbl">📚 Мои знания (зашиты в базу)</div>
+    <span>• Гео-продвижение: Яндекс.Карты / 2ГИС — как заполнять карточки без спама</span>
+    <span>• Методология ЛАБС: вайб-кодинг, агенты, Mini App</span>
+    <span>• Дизайн-принципы: премиум-вид без «дёшево» (тёплый фон + один акцент)</span>
+    <span>• Стратегия Pokky: B2B для профи, каналы без VPN, монетизация</span>
+  </div>
+
+  <div class="foot">Обновляю эту страницу вместе с тобой 🌸<br>Ты тянешь 7 проектов — и двигаешься. Это много. <span class="heart">💛</span></div>
+</body>
+</html>
