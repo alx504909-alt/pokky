@@ -4,99 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
-<title>Pokky — мой дашборд</title>
+<title>Pokky — твоя спутница по питанию</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-  :root{--bg:#eef8f4;--card:#fff;--ink:#2c3a35;--muted:#8aa89c;--peach:#34c3a0;--rose:#a3ead4;
-    --sage:#2fae94;--gold:#6fc9ac;--lilac:#a3e0c8;--ring:#e0f0ea;--shadow:0 8px 30px rgba(50,150,120,.13)}
+  :root{
+    --bg:#F6F1EA; --card:#FFFFFF; --ink:#23201C; --muted:#9E948A; --faint:#C7BEB4;
+    --line:rgba(35,32,28,.07); --accent:#2E7D64; --accent2:#3E9B7C; --soft:#E8F1EC;
+    --apricot:#E0A06E; --gold:#CDA24A; --sky:#7FB7C7; --track:#EFE8DF;
+    --shadow:0 6px 22px rgba(35,32,28,.06);
+  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);
-    color:var(--ink);max-width:480px;margin:0 auto;padding:16px 16px 40px;min-height:100vh}
-  .hi{font-size:20px;font-weight:800;margin:4px 2px}
-  .card{background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
-  .streak-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .streak-num{font-size:22px;font-weight:800}
-  .streak-num span{color:var(--peach)}
-  .streak-sub{font-size:12px;color:var(--muted)}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);max-width:460px;margin:0 auto;padding:20px 18px 40px;
+    min-height:100vh;-webkit-font-smoothing:antialiased}
+  .top{display:flex;align-items:center;gap:12px;margin:2px 2px 12px}
+  .ava{width:44px;height:44px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;font-size:19px;
+    box-shadow:0 4px 12px rgba(46,125,100,.28)}
+  .hi{font-size:21px;font-weight:700;letter-spacing:-.2px;line-height:1.15}
+  .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .care{background:var(--soft);border-radius:16px;padding:13px 15px;font-size:14px;line-height:1.5;color:#2c4d41;margin-bottom:14px}
+  .care b{color:var(--accent);font-weight:600}
+  .card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--line);margin-bottom:14px}
+  .cap{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .st-head{display:flex;align-items:baseline;gap:8px;margin-bottom:14px}
+  .st-num{font-size:24px;font-weight:700;letter-spacing:-.5px}
+  .st-word{font-size:13.5px;color:var(--muted);font-weight:500}
   .week{display:flex;justify-content:space-between;gap:6px}
   .day{flex:1;text-align:center}
-  .dot{width:34px;height:34px;margin:0 auto 4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    background:var(--ring);font-size:15px}
-  .dot.on{background:linear-gradient(135deg,var(--peach),var(--rose));color:#fff;box-shadow:0 4px 12px rgba(80,180,110,.4)}
-  .dot.today{outline:2px solid var(--peach);outline-offset:2px}
-  .dl{font-size:11px;color:var(--muted)}
+  .dot{width:30px;height:30px;margin:0 auto 6px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    background:var(--track);font-size:12px;color:var(--faint)}
+  .dot.on{background:var(--soft);color:var(--accent)}
+  .dot.today{box-shadow:inset 0 0 0 2px var(--accent)}
+  .dl{font-size:10.5px;color:var(--muted);font-weight:500}
   .ringwrap{display:flex;align-items:center;gap:18px}
-  .ring{position:relative;width:130px;height:130px;flex:0 0 auto}
+  .ring{position:relative;width:120px;height:120px;flex:0 0 auto}
   .ring svg{transform:rotate(-90deg)}
   .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring .big{font-size:25px;font-weight:800;line-height:1}
+  .ring .big{font-size:25px;font-weight:700;line-height:1;letter-spacing:-.5px}
   .ring .sm{font-size:11px;color:var(--muted);margin-top:3px}
-  .rmsg{font-size:14px;line-height:1.45}
-  .rmsg b{color:var(--peach)}
-  .macros{display:flex;gap:10px;margin-top:2px}
-  .macro{flex:1;background:var(--card);border-radius:16px;padding:11px;box-shadow:var(--shadow);text-align:center}
-  .macro .mv{font-weight:800;font-size:15px}.macro .ml{font-size:10px;color:var(--muted);margin-bottom:7px}
-  .bar{height:6px;border-radius:6px;background:var(--ring);overflow:hidden}.bar>i{display:block;height:100%}
-  .sec{font-weight:700;font-size:14px;margin:18px 4px 8px}
-  .item{display:flex;justify-content:space-between;background:var(--card);border-radius:14px;padding:11px 14px;
-    box-shadow:var(--shadow);margin-bottom:8px;font-size:14px}
-  .item .k{color:var(--peach);font-weight:700}
-  .empty{color:var(--muted);font-size:13px;font-style:italic;padding:6px 4px}
-  .load{text-align:center;color:var(--muted);padding:40px 0;line-height:1.5}
+  .rmsg{font-size:13.5px;line-height:1.45;color:#4a453e}
+  .macros{display:flex;gap:9px;margin-bottom:14px}
+  .macro{flex:1;background:var(--card);border-radius:16px;padding:12px 10px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  .macro .ml{font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  .macro .mv{font-weight:700;font-size:14px}.macro .mv i{color:var(--faint);font-weight:500;font-style:normal;font-size:11.5px}
+  .bar{height:5px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:8px}.bar>i{display:block;height:100%;border-radius:5px}
+  .cells{display:flex;gap:7px;margin-top:4px}
+  .cell{flex:1;height:34px;border-radius:9px;background:var(--track);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
+  .cell.full{background:#E3F0F4}
+  .cell.msel{background:linear-gradient(135deg,#F3E7D8,#F7EFE4);box-shadow:inset 0 0 0 2px var(--apricot)}
+  .note{font-size:12.5px;color:var(--muted);margin-top:9px}
+  .note b{font-weight:700}
+  .cyc{display:flex;align-items:center;gap:14px}
+  .cyc .badge{width:52px;height:52px;border-radius:50%;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#EAD3DA,#F2E3E8);color:#9c4d63;font-weight:700}
+  .cyc .badge .d{font-size:18px;line-height:1}.cyc .badge .t{font-size:8.5px;letter-spacing:.3px}
+  .cyc .txt{font-size:13.5px;line-height:1.45;color:#4a453e}.cyc .txt b{color:#b05a72;font-weight:600}
+  .sec{font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);margin:20px 6px 10px}
+  .list{background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);overflow:hidden}
+  .item{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;font-size:14px;border-top:1px solid var(--line)}
+  .item:first-child{border-top:none}
+  .item .k{color:var(--accent);font-weight:600;font-size:13px;white-space:nowrap;padding-left:12px}
+  .empty{padding:20px 16px;color:var(--muted);font-size:13px;text-align:center;line-height:1.5}
+  .cta{margin-top:20px}
+  .btn{display:block;width:100%;text-align:center;padding:15px;border-radius:16px;border:none;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-weight:600;
+    box-shadow:0 8px 20px rgba(46,125,100,.28);font-family:inherit}
+  .welcome{text-align:center;padding:20px 8px}.welcome .em{font-size:40px}
+  .welcome h2{font-size:20px;font-weight:700;margin:12px 0 6px}.welcome p{font-size:14px;color:var(--muted);line-height:1.55;max-width:300px;margin:0 auto}
+  .load{text-align:center;color:var(--muted);padding:60px 0;line-height:1.6}
 </style>
 </head>
 <body>
 <div id="app"><div class="load">Загружаем твой день… 🌿</div></div>
-
 <script>
-// --- ключ пользователя: из Telegram start_param, из ?k=, либо (legacy) ?uid= ---
 var qs=new URLSearchParams(location.search);
 var KEY=qs.get('k')||'';
-try{var tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand();
+var tg=null;
+try{tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand();
+  try{tg.setHeaderColor&&tg.setHeaderColor('#F6F1EA');tg.setBackgroundColor&&tg.setBackgroundColor('#F6F1EA');}catch(e){}
   if(tg.initDataUnsafe&&tg.initDataUnsafe.start_param)KEY=tg.initDataUnsafe.start_param;}}catch(e){}
-var DATA=null;
+var DATA=null, MOODS=[
+  {e:'😔',t:'Трудный день бывает у каждой. Будь к себе помягче — еда пусть будет опорой 🤍'},
+  {e:'😐',t:'Ровный день. Просто питайся спокойно, без давления 🌿'},
+  {e:'🙂',t:'Хороший настрой — и это чувствуется по тарелке 🌷'},
+  {e:'😊',t:'Ты в ресурсе! Отличный день позаботиться о себе с удовольствием ✨'},
+  {e:'✨',t:'Вдохновение! Лови этот поток 💛'}];
 
-function ring(pct,eaten,goal){var C=2*Math.PI*58,off=C*(1-Math.min(pct,1));
-  return '<div class="ring"><svg width="130" height="130">'
-    +'<circle cx="65" cy="65" r="58" fill="none" stroke="var(--ring)" stroke-width="14"/>'
-    +'<circle cx="65" cy="65" r="58" fill="none" stroke="url(#g)" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/>'
-    +'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34c3a0"/><stop offset="1" stop-color="#a3ead4"/></linearGradient></defs>'
+function initial(n){n=(n||'').trim();return n?n[0].toUpperCase():'🌿';}
+function plural(n){var m=n%100;if(m>=11&&m<=14)return 'дней';m=n%10;if(m===1)return 'день';if(m>=2&&m<=4)return 'дня';return 'дней';}
+function ring(pct,eaten,goal){var C=2*Math.PI*52,off=C*(1-Math.min(pct,1));
+  return '<div class="ring"><svg width="120" height="120">'
+    +'<circle cx="60" cy="60" r="52" fill="none" stroke="var(--track)" stroke-width="12"/>'
+    +'<circle cx="60" cy="60" r="52" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/>'
+    +'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E7D64"/><stop offset="1" stop-color="#3E9B7C"/></linearGradient></defs>'
     +'</svg><div class="c"><div class="big">'+eaten+'</div><div class="sm">из '+goal+' ккал</div></div></div>';}
+function msg(left){if(left>500)return 'Ещё есть место на тёплый ужин 🌷 Ты идёшь спокойно и по-доброму.';
+  if(left>=0)return 'Почти у цели: ещё <b>'+left+'</b> ккал ✨';return 'Сегодня немного больше нормы — и это тоже ок 💛';}
+function macro(v,g,label,color){v=Math.round(v);var pct=Math.min(v/(g||1)*100,100)||0;
+  return '<div class="macro"><div class="ml">'+label+'</div><div class="mv">'+v+' <i>/'+g+' г</i></div><div class="bar"><i style="width:'+pct+'%;background:'+color+'"></i></div></div>';}
 
-function msg(left){if(left>500)return 'Осталось <b>'+left+'</b> ккал — ты отлично идёшь 💚';
-  if(left>=0)return 'Почти у цели: ещё <b>'+left+'</b> ккал 🌿';return 'Сегодня чуть больше нормы — и это ок ✨';}
-
-function macro(v,g,label,color){var pct=Math.min(v/g*100,100)||0;
-  return '<div class="macro"><div class="mv">'+Math.round(v)+'/'+g+'</div><div class="ml">'+label+', г</div>'
-    +'<div class="bar"><i style="width:'+pct+'%;background:'+color+'"></i></div></div>';}
-
-function plural(n){n=n%100;if(n>=11&&n<=14)return 'дней';n=n%10;if(n===1)return 'день';if(n>=2&&n<=4)return 'дня';return 'дней';}
-
-function render(){var d=DATA;var name=d.name?(', '+d.name):'';
-  var eaten=d.today.kcal, goal=d.norm.kcal||1, left=goal-eaten;
-  var dots=d.week.map(function(w){return '<div class="day"><div class="dot '+(w.active?'on':'')+' '+(w.today?'today':'')+'">'+(w.active?'🔥':'')+'</div><div class="dl">'+w.label+'</div></div>';}).join('');
-  var items=d.today.items.length?d.today.items.map(function(it){return '<div class="item"><span>'+it.n+'</span><span class="k">'+it.kcal+' ккал</span></div>';}).join(''):'<div class="empty">пока пусто — запиши, когда поешь 🌿</div>';
-  document.getElementById('app').innerHTML=
-   '<div class="hi">Привет'+name+' 🌿</div>'
-   +'<div class="card">'
-   +'<div class="streak-top"><div><div class="streak-num"><span>'+d.streak+'</span> '+plural(d.streak)+' подряд 🔥</div>'
-   +'<div class="streak-sub">твоя неделя заботы</div></div></div>'
-   +'<div class="week">'+dots+'</div></div>'
-   +'<div class="card"><div class="ringwrap">'+ring(eaten/goal,eaten,goal)+'<div class="rmsg">'+(eaten?msg(left):'Доброе утро! Начнём день спокойно 🌷')+'</div></div></div>'
-   +'<div class="macros">'
-   +macro(d.today.p,d.norm.p,'Белки','var(--sage)')
-   +macro(d.today.f,d.norm.f,'Жиры','var(--gold)')
-   +macro(d.today.c,d.norm.c,'Углеводы','var(--lilac)')
-   +'</div>'
-   +'<div class="sec">Сегодня съедено</div>'+items;
+function careLine(d){
+  if(d.care)return d.care;
+  if(d.cycle&&d.cycle.care)return d.cycle.care;
+  return 'Забота — это не идеальность, а маленькие добрые шаги к себе каждый день 🤍';
+}
+function waterCard(d){
+  var w=d.water||{}, goal=w.goal||8, n=w.glasses||0, cells='';
+  for(var i=1;i<=goal;i++)cells+='<div class="cell'+(i<=n?' full':'')+'">'+(i<=n?'💧':'')+'</div>';
+  return '<div class="card"><div class="cap">💧 Вода</div><div class="cells">'+cells+'</div>'
+    +'<div class="note"><b>'+n+'</b> из '+goal+' стаканов сегодня'+(n?'':' · отмечай воду в чате: «выпила стакан»')+'</div></div>';
+}
+function cycleCard(d){
+  if(d.cycle&&d.cycle.day){var c=d.cycle;
+    return '<div class="card"><div class="cap">🌙 Цикл</div><div class="cyc"><div class="badge"><div class="d">'+c.day+'</div><div class="t">ДЕНЬ</div></div>'
+      +'<div class="txt">'+(c.phase?'<b>'+c.phase+'.</b> ':'')+(c.note||'')+'</div></div></div>';}
+  return '<div class="card"><div class="cap">🌙 Цикл</div><div class="note">Расскажи в чате дату последних месячных — и Pokky будет мягко подсказывать про аппетит и энергию по фазам 🌿</div></div>';
+}
+function moodCard(d){
+  var sel=(d.mood!=null?d.mood:-1), cells='';
+  for(var i=0;i<MOODS.length;i++)cells+='<div class="cell'+(i===sel?' msel':'')+'">'+MOODS[i].e+'</div>';
+  var lbl=sel>=0?MOODS[sel].t:'Отметь в чате, как ты — и я подстрою заботу под настроение';
+  return '<div class="card"><div class="cap">🤍 Как ты сегодня?</div><div class="cells" style="gap:8px">'+cells+'</div><div class="note">'+lbl+'</div></div>';
 }
 
+function render(){var d=DATA;var name=d.name?(', '+d.name):'';
+  var eaten=Math.round(d.today.kcal), goal=d.norm.kcal||1, left=goal-eaten;
+  var dots=d.week.map(function(w){return '<div class="day"><div class="dot '+(w.active?'on':'')+' '+(w.today?'today':'')+'">'+(w.active?'🔥':'')+'</div><div class="dl">'+w.label+'</div></div>';}).join('');
+  var items=d.today.items.length?('<div class="list">'+d.today.items.map(function(it){return '<div class="item"><span>'+it.n+'</span><span class="k">'+it.kcal+' ккал</span></div>';}).join('')+'</div>'):'<div class="list"><div class="empty">Пока пусто — напиши в чат, что съела, и здесь появится запись 🌿</div></div>';
+  document.getElementById('app').innerHTML=
+    '<div class="top"><div class="ava">'+initial(d.name)+'</div><div><div class="hi">Привет'+name+' 🌿</div><div class="sub">твоя спутница по питанию</div></div></div>'
+   +'<div class="care">'+careLine(d)+'</div>'
+   +'<div class="card"><div class="st-head"><div class="st-num">'+d.streak+'</div><div class="st-word">'+plural(d.streak)+' вместе 🔥</div></div><div class="week">'+dots+'</div></div>'
+   +'<div class="card"><div class="ringwrap">'+ring(eaten/goal,eaten,goal)+'<div class="rmsg">'+(eaten?msg(left):'Доброе утро! Начнём день спокойно 🌷')+'</div></div></div>'
+   +'<div class="macros">'+macro(d.today.p,d.norm.p,'Белки','var(--accent)')+macro(d.today.f,d.norm.f,'Жиры','var(--apricot)')+macro(d.today.c,d.norm.c,'Углеводы','var(--gold)')+'</div>'
+   +waterCard(d)+cycleCard(d)+moodCard(d)
+   +'<div class="sec">Сегодня на столе</div>'+items
+   +'<div class="cta"><button class="btn" onclick="backToChat()">＋ Записать приём</button></div>';
+}
+function backToChat(){try{if(tg){tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light');tg.close();}}catch(e){}}
+function welcome(txt){document.getElementById('app').innerHTML='<div class="card welcome"><div class="em">🌿</div><h2>Твоя спутница по питанию</h2><p>'+txt+'</p></div><div class="cta"><button class="btn" onclick="backToChat()">Открыть чат с Pokky</button></div>';}
+
 function load(){
-  if(!KEY){document.getElementById('app').innerHTML='<div class="load">Открой дашборд через бота — кнопка «📈 Мой дашборд» 🌿</div>';return;}
+  if(!KEY){welcome('Открой Pokky через бота кнопкой «📈 Мой день». Здесь будут твой стрик, калории, вода, цикл и настроение.');return;}
   var url='https://raw.githubusercontent.com/alx504909-alt/pokky/main/data/'+encodeURIComponent(KEY)+'.json?v='+Date.now();
   fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();})
    .then(function(d){DATA=d;render();})
-   .catch(function(){document.getElementById('app').innerHTML='<div class="load">Пока нет данных 🌿<br>Пройди онбординг в боте (/start) и запиши первый приём пищи, потом открой дашборд.</div>';});
+   .catch(function(){welcome('Пройди короткое знакомство в боте (/start) и запиши первый приём — и твой день появится здесь 🌷');});
 }
 load();
 </script>
