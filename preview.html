@@ -107,8 +107,8 @@
   </div>
 
   <div class="card"><div class="cap">💧 Вода</div>
-    <div class="glasses"><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass full">💧</div><div class="glass"></div><div class="glass"></div><div class="glass"></div></div>
-    <div class="wnum"><b>5</b> из 8 стаканов сегодня</div>
+    <div class="glasses" id="glasses"></div>
+    <div class="wnum"><b id="wnum">5</b> из 8 стаканов сегодня · нажимай на стакан</div>
   </div>
 
   <div class="card"><div class="cap">🌙 Цикл</div>
@@ -133,7 +133,22 @@
     <div class="item"><span>Яблоко · орехи</span><span class="k">260 ккал</span></div>
   </div>
 
-  <div class="cta"><button class="btn">＋ Записать приём или воду</button></div>
-  <div class="demo">это превью нового вида · данные для примера</div>
+  <div class="cta"><button class="btn" onclick="rec()">＋ Записать приём</button></div>
+  <div class="demo">это превью нового вида · вода кликается, данные для примера</div>
+<script>
+  var GOAL=8, water=5;
+  function drawWater(){
+    var g=document.getElementById('glasses'); g.innerHTML='';
+    for(var i=1;i<=GOAL;i++){
+      var d=document.createElement('div');
+      d.className='glass'+(i<=water?' full':'');
+      d.textContent=i<=water?'💧':'';
+      d.onclick=(function(n){return function(){ water=(water===n?n-1:n); document.getElementById('wnum').textContent=water; drawWater(); };})(i);
+      g.appendChild(d);
+    }
+  }
+  drawWater();
+  function rec(){ alert('В боевой версии кнопка откроет чат с Pokky, чтобы записать приём голосом, текстом или фото 🌿'); }
+</script>
 </body>
 </html>
