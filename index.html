@@ -111,7 +111,7 @@ function careLine(d){
 }
 function waterCard(d){
   var w=d.water||{}, goal=w.goal||8, n=w.glasses||0, cells='';
-  for(var i=1;i<=goal;i++)cells+='<div class="cell'+(i<=n?' full':'')+'">'+(i<=n?'💧':'')+'</div>';
+  for(var i=1;i<=goal;i++)cells+='<div class="cell'+(i<=n?' full':'')+'" onclick="guide()">'+(i<=n?'💧':'')+'</div>';
   return '<div class="card"><div class="cap">💧 Вода</div><div class="cells">'+cells+'</div>'
     +'<div class="note"><b>'+n+'</b> из '+goal+' стаканов сегодня'+(n?'':' · отмечай воду в чате: «выпила стакан»')+'</div></div>';
 }
@@ -123,7 +123,7 @@ function cycleCard(d){
 }
 function moodCard(d){
   var sel=(d.mood!=null?d.mood:-1), cells='';
-  for(var i=0;i<MOODS.length;i++)cells+='<div class="cell'+(i===sel?' msel':'')+'">'+MOODS[i].e+'</div>';
+  for(var i=0;i<MOODS.length;i++)cells+='<div class="cell'+(i===sel?' msel':'')+'" onclick="guide()">'+MOODS[i].e+'</div>';
   var lbl=sel>=0?MOODS[sel].t:'Отметь в чате, как ты — и я подстрою заботу под настроение';
   return '<div class="card"><div class="cap">🤍 Как ты сегодня?</div><div class="cells" style="gap:8px">'+cells+'</div><div class="note">'+lbl+'</div></div>';
 }
@@ -143,6 +143,7 @@ function render(){var d=DATA;var name=d.name?(', '+d.name):'';
    +'<div class="cta"><button class="btn" onclick="backToChat()">＋ Записать приём</button></div>';
 }
 function backToChat(){try{if(tg){tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light');tg.close();}}catch(e){}}
+function guide(){try{var m='Отметить можно кнопкой в чате: 💧 Вода или 🤍 Настроение 🌿';if(tg&&tg.showAlert){tg.showAlert(m);}else{alert(m);}}catch(e){}}
 function welcome(txt){document.getElementById('app').innerHTML='<div class="card welcome"><div class="em">🌿</div><h2>Твоя спутница по питанию</h2><p>'+txt+'</p></div><div class="cta"><button class="btn" onclick="backToChat()">Открыть чат с Pokky</button></div>';}
 
 function load(){
